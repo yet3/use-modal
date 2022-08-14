@@ -52,5 +52,14 @@
     "typescript",
     "modal",
     "hook"
-  ]
+  ],
+  "description": "React hook that makes using modals easier",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yet3/use-modal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yet3/use-modal/issues"
+  },
+  "homepage": "https://github.com/yet3/use-modal#readme"
 }
