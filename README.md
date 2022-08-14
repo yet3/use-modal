@@ -1,6 +1,8 @@
 # useModal
 
 ![GitHub license](https://img.shields.io/github/license/yet3/use-modal?style=flat)
+<a href='https://www.npmjs.com/package/@yet3/use-modal'>
+  ![npm](https://img.shields.io/npm/v/@yet3/use-modal)
 
 React hook that makes using modals easier.
 
