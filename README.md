@@ -52,6 +52,13 @@ const Component = () => {
 
 ### Options
 ```ts
+export interface BackdropOptions {
+  backdropColor: string;
+  closeOnBackdropClick?: boolean
+  onBackdropClick?: (d: {closeModal: ModalCloseFunc}) => void | null | false
+  backdropStyle?: CSSProperties
+}
+
 export interface CommonOptions {
   closeAfter?: null | false | number;
   portalElement?: PortalElement | null;
@@ -60,6 +67,7 @@ export interface CommonOptions {
   backdrop?: boolean | null | JSX.Element | ((children: ReactNode, opts: BackdropOptions) => JSX.Element);
   closeOnBackdropClick?: boolean
   onBackdropClick?: (d: {closeModal: ModalCloseFunc}) => void | null | false
+  backdropStyle?: CSSProperties
   modalWrapper?: false | null | ((children: ReactNode, opts: ModalWrapperOptions) => JSX.Element) | JSX.Element;
 }
 
