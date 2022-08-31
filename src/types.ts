@@ -1,4 +1,4 @@
-import { ComponentProps, FunctionComponent, ReactNode, ReactPortal } from 'react';
+import { ComponentProps, CSSProperties, FunctionComponent, ReactNode, ReactPortal } from 'react';
 
 export type Props<T extends FunctionComponent<any>> = Omit<ComponentProps<T>, 'closeModal'>;
 
@@ -16,6 +16,7 @@ export interface BackdropOptions {
   backdropColor: string;
   closeOnBackdropClick?: boolean
   onBackdropClick?: (d: {closeModal: ModalCloseFunc}) => void | null | false
+  backdropStyle?: CSSProperties
 }
 export interface ModalWrapperOptions extends BackdropOptions { }
 
@@ -24,9 +25,10 @@ export interface CommonOptions {
   portalElement?: PortalElement | null;
 
   backdropColor?: string | null | false;
-  backdrop?: boolean | null | JSX.Element | ((children: ReactNode, opts: BackdropOptions) => JSX.Element);
+  backdrop?: boolean | null | JSX.Element | ((opts: BackdropOptions) => JSX.Element);
   closeOnBackdropClick?: boolean
   onBackdropClick?: (d: {closeModal: ModalCloseFunc}) => void | null | false
+  backdropStyle?: CSSProperties
   modalWrapper?: false | null | ((children: ReactNode, opts: ModalWrapperOptions) => JSX.Element) | JSX.Element;
 }
 

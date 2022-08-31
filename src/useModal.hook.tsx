@@ -1,4 +1,12 @@
-import { cloneElement, createElement, FunctionComponent, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  cloneElement,
+  createElement,
+  FunctionComponent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { ModalOptions, Props, UseModalHookOptions, UseModalResult } from './types';
 import { getPortalElement } from './utils/getPortalElement.util';
@@ -73,16 +81,8 @@ const useModal = <T extends FunctionComponent<any>>(modal: T, hOptions: UseModal
       let shouldCloseOnClick = modalData.closeOnBackdropClick ?? true;
       if (modalData.closeOnBackdropClick == null && modalData.onBackdropClick) shouldCloseOnClick = false;
 
-      let backdrop =
-        typeof modalData.backdrop === 'function'
-          ? modalData.backdrop(el, {
-              backdropColor,
-              closeOnBackdropClick: shouldCloseOnClick,
-              onBackdropClick: modalData.onBackdropClick,
-            })
-          : modalData.backdrop;
-
-      if (typeof backdrop !== 'function') {
+      let backdrop: JSX.Element;
+      if (!modalData.backdrop || modalData.backdrop === true) {
         backdrop = (
           <div
             onClick={() => {
@@ -93,16 +93,34 @@ const useModal = <T extends FunctionComponent<any>>(modal: T, hOptions: UseModal
               if (shouldCloseOnClick) handleClose();
             }}
             style={{
-              position: 'absolute',
+              position: 'fixed',
               top: 0,
               left: 0,
-              width: '100vw',
-              height: '100vh',
+              width: '100%',
+              height: '100%',
               backgroundColor: backdropColor,
+              ...modalData.backdropStyle,
             }}
           />
         );
+      } else {
+        if (typeof modalData.backdrop === 'function') {
+          backdrop = modalData.backdrop({
+            backdropColor,
+            closeOnBackdropClick: shouldCloseOnClick,
+            onBackdropClick: modalData.onBackdropClick,
+            backdropStyle: modalData.backdropStyle,
+          });
+        } else {
+          backdrop = cloneElement(modalData.backdrop, {
+            backdropColor,
+            closeOnBackdropClick: shouldCloseOnClick,
+            onBackdropClick: modalData.onBackdropClick,
+            backdropStyle: modalData.backdropStyle,
+          });
+        }
       }
+      backdrop = cloneElement(backdrop, { 'data-backdrop': true });
 
       return createPortal(
         <div>
