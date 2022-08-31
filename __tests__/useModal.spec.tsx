@@ -1,8 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
-import { isValidElement } from 'react';
+import { isValidElement, useState } from 'react';
 import { UseModal } from '../src/UseModal';
 import { useModal } from '../src/useModal.hook';
-import { Modal } from './modal';
+
+const Modal = () => {
+  const hook = useState(false);
+  return <div>Modal: {hook ? 'true' : 'false'}</div>;
+};
 
 describe('useModal hook', () => {
   beforeAll(() => {
@@ -49,8 +53,15 @@ describe('useModal hook', () => {
 
     expect(isValidElement(result.current.component!.children)).toBe(true);
     const child = result.current.component!.children as JSX.Element;
-    expect(child.props).toHaveProperty('closeModal', expect.any(Function));
-    act(() => child.props.closeModal());
+    let closeModal: null | Function = null;
+    if (child.props?.children) {
+      child.props.children.some((c: JSX.Element) => {
+        if (c.props?.closeModal) closeModal = c.props.closeModal
+        return false;
+      });
+    }
+    expect(closeModal).toEqual(expect.any(Function));
+    act(() => closeModal!());
     expect(result.current.isOpen).toBe(false);
 
     unmount();
@@ -64,7 +75,7 @@ describe('useModal hook', () => {
     expect(result.current.isOpen).toEqual(true);
     expect(result.current.component).not.toBeNull();
 
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 300));
     expect(result.current.isOpen).toBe(false);
     expect(result.current.component).toBeNull();
 
@@ -72,11 +83,11 @@ describe('useModal hook', () => {
     expect(result.current.isOpen).toEqual(true);
     expect(result.current.component).not.toBeNull();
 
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 300));
     expect(result.current.isOpen).toEqual(true);
     expect(result.current.component).not.toBeNull();
 
-    await new Promise(r => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 250));
     expect(result.current.isOpen).toEqual(false);
     expect(result.current.component).toBeNull();
 
@@ -88,11 +99,11 @@ describe('useModal hook', () => {
     expect(result2.current.isOpen).toEqual(true);
     expect(result2.current.component).not.toBeNull();
 
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise((r) => setTimeout(r, 300));
     expect(result2.current.isOpen).toEqual(true);
     expect(result2.current.component).not.toBeNull();
 
-    await new Promise(r => setTimeout(r, 350));
+    await new Promise((r) => setTimeout(r, 350));
     expect(result2.current.isOpen).toEqual(false);
     expect(result2.current.component).toBeNull();
 

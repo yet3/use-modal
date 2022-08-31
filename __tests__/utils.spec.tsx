@@ -1,8 +1,13 @@
 import { renderHook } from '@testing-library/react';
+import { useState } from 'react';
 import { act } from 'react-dom/test-utils';
 import { UseModal } from '../src/UseModal';
 import { useModal } from '../src/useModal.hook';
-import { Modal } from './modal';
+
+const Modal = () => {
+  const hook = useState(false);
+  return <div>Modal: {hook ? 'true' : 'false'}</div>;
+};
 
 describe('utils', () => {
   beforeAll(() => {
